@@ -1,22 +1,22 @@
 class BufferController {
   #buffer;
-  #writer;
+  #fs;
   #renderer;
   #fileName;
   #keyBoardController;
 
-  constructor(buffer, keyBoardController, renderer, writer, fileName = "newfile.txt") {
+  constructor(buffer, keyBoardController, renderer, fs, fileName = "newfile.txt") {
     this.#buffer = buffer;
     this.#keyBoardController = keyBoardController;
     this.#renderer = renderer;
     this.#fileName = fileName;
-    this.#writer = writer;
+    this.#fs = fs;
   }
 
   #saveListener() {
     this.#keyBoardController.on("save", () => {
       this.#keyBoardController.stop();
-      this.#writer.write(this.#fileName, this.#buffer.getData());
+      this.#fs.write(this.#fileName, this.#buffer.getData());
     });
   }
 
@@ -56,8 +56,16 @@ class BufferController {
     this.#saveListener();
   }
 
+  #loadFileContent() {
+    if (this.#fs.exists(this.#fileName)) {
+      this.#buffer.add(this.#fs.read(this.#fileName).slice(""))
+    }
+  }
+
   start() {
     this.#addListeners();
+    this.#loadFileContent(this.#fileName);
+    this.#renderer.render(this.#buffer.getData())
     this.#keyBoardController.start();
   }
 }
