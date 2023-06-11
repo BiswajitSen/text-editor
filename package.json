@@ -1,0 +1,14 @@
+{
+  "name": "text-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "author": "Biswajit",
+  "license": "ISC"
+}
