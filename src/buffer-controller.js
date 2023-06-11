@@ -28,8 +28,8 @@ class BufferController {
   }
 
   #newLineListener() {
-    this.#keyBoardController.on("new-line", (char) => {
-      this.#buffer.add(char);
+    this.#keyBoardController.on("new-line", () => {
+      this.#buffer.add('\n');
       this.#renderer.render(this.#buffer.getData());
     });
   }
@@ -46,6 +46,10 @@ class BufferController {
       this.#keyBoardController.stop();
       this.#renderer.render(this.#buffer.getData());
     });
+  }
+
+  configListener(event, listener) {
+    this.#keyBoardController.on(event, listener);
   }
 
   #addListeners() {
@@ -65,7 +69,7 @@ class BufferController {
   start() {
     this.#addListeners();
     this.#loadFileContent(this.#fileName);
-    this.#renderer.render(this.#buffer.getData())
+    this.#renderer.render(this.#buffer.getData());
     this.#keyBoardController.start();
   }
 }

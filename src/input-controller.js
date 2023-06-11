@@ -1,18 +1,16 @@
-const { EventEmitter } = require('events');
+const { KeyBindings } = require('./key-bindings.js');
 
-const KeyBindings = {
-  '\r': ['new-line', '\n'],
-  '\x1B': ['stop', 'ESC'],
-  '\x7F': ['backspace', '\x7F'],
-  '\x13': ['save', '\x13']
-}
-
-class InputController extends EventEmitter {
+class InputController {
   #stdin
+  #eventEmitter
 
-  constructor(stdin) {
-    super();
+  constructor(stdin, eventEmitter) {
     this.#stdin = stdin;
+    this.#eventEmitter = eventEmitter;
+  }
+
+  on(event, listener) {
+    this.#eventEmitter.on(event, listener);
   }
 
   #setUpEnvironment() {
@@ -23,12 +21,8 @@ class InputController extends EventEmitter {
   start() {
     this.#setUpEnvironment();
     this.#stdin.on('data', (key) => {
-      if (key in KeyBindings) {
-        const [event, data] = KeyBindings[key];
-        this.emit(event, data);
-      } else {
-        this.emit('buffer-write', key);
-      }
+      const event = KeyBindings[key] || 'buffer-write';
+      this.#eventEmitter.emit(event, key);
     });
   }
 
