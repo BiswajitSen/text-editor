@@ -62,7 +62,7 @@ class BufferController {
 
   #loadFileContent() {
     if (this.#fs.exists(this.#fileName)) {
-      this.#buffer.add(this.#fs.read(this.#fileName).slice(""))
+      this.#fs.read(this.#fileName, 'utf-8').split("").forEach((char) => { this.#buffer.add(char) });
     }
   }
 
