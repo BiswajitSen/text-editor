@@ -4,12 +4,16 @@ class Buffer {
     this.#buffer = [];
   }
 
-  add(chunk) {
+  add(chunk, position) {
+    const tmp = this.#buffer.splice(position);
     this.#buffer.push(chunk);
+    this.#buffer = [...this.#buffer, ...tmp.splice(1)];
   }
 
-  removeChunk() {
+  removeChunk(position) {
+    const tmp = this.#buffer.splice(position);
     this.#buffer.pop();
+    this.#buffer = [...this.#buffer, ...tmp.splice(1)];
   }
 
   getData() {

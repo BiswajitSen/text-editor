@@ -11,5 +11,8 @@
     "start": "node main.js"
   },
   "author": "Biswajit",
-  "license": "ISC"
+  "license": "ISC",
+  "bin": {
+    "myvim": "./main.js"
+  }
 }

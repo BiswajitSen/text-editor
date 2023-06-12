@@ -13,6 +13,14 @@ class CursorController {
     }
   }
 
+  pointToNextCell() {
+    this.#position++;
+  }
+
+  pointToPreviousCell() {
+    this.#position--;
+  }
+
   position() {
     return this.#position;
   }
@@ -23,32 +31,32 @@ class CursorController {
 
   #leftKey() {
     this.#eventEmitter.on("leftKey", () => {
-      this.#position--;
+      this.pointToPreviousCell();
       this.#validatePosition();
     })
   };
 
   #rightKey() {
     this.#eventEmitter.on("rightKey", () => {
-      this.#position++;
+      this.pointToNextCell();
     })
   };
 
   #bufferWrite() {
     this.#eventEmitter.on("buffer-write", () => {
-      this.#position++;
+      this.pointToNextCell();
     })
   }
 
   #newLineListener() {
     this.#eventEmitter.on("new-line", () => {
-      this.#position++;
+      this.pointToNextCell();
     });
   }
 
   #backSpaceListener() {
     this.#eventEmitter.on("backspace", () => {
-      this.#position--;
+      this.pointToPreviousCell();
       this.#validatePosition();
     });
   }
@@ -59,7 +67,7 @@ class CursorController {
 
   #tabEvent() {
     this.#eventEmitter.on('tab', () => {
-      this.#position++;
+      this.pointToNextCell();
     })
   }
 

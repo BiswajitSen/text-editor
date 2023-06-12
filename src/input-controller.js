@@ -1,4 +1,4 @@
-const { KeyBindings } = require('./key-bindings.js');
+const { KeyBindings, validTokens } = require('./key-bindings.js');
 
 class InputController {
   #stdin
@@ -13,6 +13,10 @@ class InputController {
     this.#eventEmitter.on(event, listener);
   }
 
+  #isAValidToken(key) {
+    return key in validTokens;
+  }
+
   #setUpEnvironment() {
     this.#stdin.setRawMode(true);
     this.#stdin.setEncoding('utf-8');
@@ -21,8 +25,10 @@ class InputController {
   start() {
     this.#setUpEnvironment();
     this.#stdin.on('data', (key) => {
-      const event = KeyBindings[key] || 'buffer-write';
-      this.#eventEmitter.emit(event, key);
+      console.log(key);
+      const event = KeyBindings[key]
+      if (event) this.#eventEmitter.emit(event, key);
+      else if (key.match(/\w/) || this.#isAValidToken(key)) this.#eventEmitter.emit('buffer-write', key);
     });
   }
 
