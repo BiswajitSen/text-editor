@@ -26,7 +26,7 @@ class BufferController {
     this.#keyBoardController.on("save", () => {
       this.#keyBoardController.stop();
       const content = this.#buffer.getData().join('');
-      this.#fs.write(this.#fileName, content);
+      this.#fs.write(this.#fileName, co);
     });
   }
 
@@ -54,7 +54,8 @@ class BufferController {
   #stopListener() {
     this.#keyBoardController.on("stop", () => {
       this.#keyBoardController.stop();
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position());
+      this.#cursorController.stop();
+      this.#renderer.clearScr();
     });
   }
 

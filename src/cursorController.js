@@ -85,8 +85,25 @@ class CursorController {
     this.#bufferWrite();
   }
 
+  #hideCursor() {
+    process.stdout.write('\u001B[?25l');
+  }
+
+  #showCursor() {
+    process.stdout.write('\u001B[?25h');
+  }
+
+  #setUpEnvironment() {
+    this.#hideCursor();
+  }
+
   start() {
+    this.#setUpEnvironment();
     this.#addListeners();
+  }
+
+  stop() {
+    this.#showCursor();
   }
 
 }
