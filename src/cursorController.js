@@ -13,11 +13,11 @@ class CursorController {
     }
   }
 
-  pointToNextCell() {
+  #pointToNextCell() {
     this.#position++;
   }
 
-  pointToPreviousCell() {
+  #pointToPreviousCell() {
     this.#position--;
   }
 
@@ -29,34 +29,38 @@ class CursorController {
     this.#eventEmitter.on(event, listener);
   };
 
+  fireEvent(eventName) {
+    this.#eventEmitter.emit(eventName);
+  }
+
   #leftKey() {
     this.#eventEmitter.on("leftKey", () => {
-      this.pointToPreviousCell();
+      this.#pointToPreviousCell();
       this.#validatePosition();
     })
   };
 
   #rightKey() {
     this.#eventEmitter.on("rightKey", () => {
-      this.pointToNextCell();
+      this.#pointToNextCell();
     })
   };
 
   #bufferWrite() {
     this.#eventEmitter.on("buffer-write", () => {
-      this.pointToNextCell();
+      this.#pointToNextCell();
     })
   }
 
   #newLineListener() {
     this.#eventEmitter.on("new-line", () => {
-      this.pointToNextCell();
+      this.#pointToNextCell();
     });
   }
 
   #backSpaceListener() {
     this.#eventEmitter.on("backspace", () => {
-      this.pointToPreviousCell();
+      this.#pointToPreviousCell();
       this.#validatePosition();
     });
   }
@@ -67,7 +71,8 @@ class CursorController {
 
   #tabEvent() {
     this.#eventEmitter.on('tab', () => {
-      this.pointToNextCell();
+      this.#pointToNextCell();
+      this.#pointToNextCell();
     })
   }
 

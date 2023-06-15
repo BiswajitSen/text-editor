@@ -25,7 +25,6 @@ class InputController {
   start() {
     this.#setUpEnvironment();
     this.#stdin.on('data', (key) => {
-      console.log(key);
       const event = KeyBindings[key]
       if (event) this.#eventEmitter.emit(event, key);
       else if (key.match(/\w/) || this.#isAValidToken(key)) this.#eventEmitter.emit('buffer-write', key);

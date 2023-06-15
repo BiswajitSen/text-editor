@@ -18,8 +18,6 @@ class BufferController {
   #loadFileContent() {
     if (this.#fs.exists(this.#fileName)) {
       this.#fs.read(this.#fileName, 'utf-8').split("").forEach((char) => {
-        this.#buffer.add(char, this.#cursorController.position());
-        this.#cursorController.pointToNextCell();
       });
     }
   }
@@ -27,7 +25,8 @@ class BufferController {
   #saveListener() {
     this.#keyBoardController.on("save", () => {
       this.#keyBoardController.stop();
-      this.#fs.write(this.#fileName, this.#buffer.getData());
+      const content = this.#buffer.getData().join('');
+      this.#fs.write(this.#fileName, content);
     });
   }
 
@@ -67,8 +66,12 @@ class BufferController {
 
   #rightKeyListener() {
     this.#keyBoardController.on('rightKey', () => {
-      this.#buffer.add(' ', this.#cursorController.position());
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position());
+      const pos = this.#cursorController.position();
+
+      if (!this.#buffer.hasElement(pos)) {
+        this.#buffer.add(' ', pos);
+      }
+      this.#renderer.render(this.#buffer.getData(), pos);
     })
   }
 

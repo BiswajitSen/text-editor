@@ -1,1 +1,5 @@
-*.swp\n*.swo\nDS_Store\nTODO\nREADME.md
+*.swp
+*.swo
+DS_Store
+TODO
+README.md
