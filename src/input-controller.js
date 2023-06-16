@@ -10,8 +10,6 @@ class InputController {
   #eventEmitter
   #currentKeyBindings
   #modeId
-  #modes
-  #mode
   #modeBindings
 
   constructor(stdin, eventEmitter) {
@@ -19,19 +17,12 @@ class InputController {
     this.#eventEmitter = eventEmitter;
     this.#modeId = 0;
     this.#currentKeyBindings = InsertModeKeyBindings;
-    this.#modes = Object.keys(Bindings);
-    this.#mode = 'INSERT';
     this.#modeBindings = Object.values(Bindings);
-  }
-
-  mode() {
-    return this.#mode;
   }
 
   #addChangeModeListener() {
     this.#eventEmitter.on('change-mode', () => {
       this.#modeId = (this.#modeId + 1) % this.#modeBindings.length;
-      this.#mode = this.#modes[this.#modeId];
       this.#currentKeyBindings = this.#modeBindings[this.#modeId];
     })
   }
@@ -49,7 +40,7 @@ class InputController {
     this.#setUpEnvironment();
     this.#addChangeModeListener();
     this.#stdin.on('data', (key) => {
-      if (this.#mode === 'INSERT') {
+      if (this.#modeId === 0) {
         const event = this.#currentKeyBindings[key] || 'buffer-write';
         this.#eventEmitter.emit(event, key);
       } else {

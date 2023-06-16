@@ -1,3 +1,5 @@
+const modes = ['Insert', 'Normal'];
+
 class BufferController {
   #buffer
   #fs
@@ -5,6 +7,8 @@ class BufferController {
   #fileName
   #keyBoardController
   #cursorController
+  #mode
+  #modeId
 
   constructor(buffer, keyBoardController, cursorController, renderer, fs, fileName = "newfile.txt") {
     this.#buffer = buffer;
@@ -13,6 +17,8 @@ class BufferController {
     this.#renderer = renderer;
     this.#fileName = fileName;
     this.#fs = fs;
+    this.#modeId = 0;
+    this.#mode = modes[0];
   }
 
   #loadFileContent() {
@@ -33,39 +39,35 @@ class BufferController {
   #bufferWriteListner() {
     this.#keyBoardController.on("buffer-write", (char) => {
       this.#buffer.add(char, this.#cursorController.position());
-      const mode = this.#keyBoardController.mode();
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
+      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), this.#mode);
     });
   }
 
   #changeModeListener() {
     this.#keyBoardController.on('change-mode', () => {
-      const mode = this.#keyBoardController.mode();
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
+      this.#modeId = (this.#modeId + 1) % modes.length;
+      this.#mode = modes[this.#modeId];
+      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), this.#mode);
     })
   }
 
   #newLineListener() {
     this.#keyBoardController.on("new-line", () => {
       this.#buffer.add('\n', this.#cursorController.position());
-      const mode = this.#keyBoardController.mode();
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
+      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), this.#mode);
     });
   }
 
   #backSpaceListener() {
     this.#keyBoardController.on("backspace", () => {
       this.#buffer.removeChunk(this.#cursorController.position());
-      const mode = this.#keyBoardController.mode();
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
+      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), this.#mode);
     });
   }
 
   #leftKeyListener() {
     this.#keyBoardController.on('leftKey', () => {
-      const mode = this.#keyBoardController.mode();
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
+      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), this.#mode);
     })
   }
 
@@ -76,8 +78,7 @@ class BufferController {
       if (!this.#buffer.hasElement(pos)) {
         this.#buffer.add(' ', pos);
       }
-      const mode = this.#keyBoardController.mode();
-      this.#renderer.render(this.#buffer.getData(), pos, mode);
+      this.#renderer.render(this.#buffer.getData(), pos, this.#mode);
     })
   }
 
@@ -99,8 +100,7 @@ class BufferController {
   #deleteLineListener() {
     this.#keyBoardController.on('delete-word', () => {
       this.#buffer.deleteALine(this.#cursorController.position());
-      const mode = this.#keyBoardController.mode();
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
+      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), this.#mode);
     });
   }
 
@@ -124,8 +124,7 @@ class BufferController {
   start() {
     this.#addListeners();
     this.#loadFileContent(this.#fileName);
-    const mode = this.#keyBoardController.mode();
-    this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
+    this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), this.#mode);
     this.#cursorController.start();
     this.#keyBoardController.start();
   }
