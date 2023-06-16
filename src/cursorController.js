@@ -46,6 +46,14 @@ class CursorController {
     })
   };
 
+  #deleteWord() {
+    //TODO
+  }
+
+  #deleteLine() {
+    //TODO
+  }
+
   #bufferWrite() {
     this.#eventEmitter.on("buffer-write", () => {
       this.#pointToNextCell();

@@ -24,6 +24,18 @@ class Buffer {
   getData() {
     return this.#buffer.slice(0);
   }
+
+  deleteAll() {
+    this.#buffer.splice(0);
+  }
+
+  deleteALine(position) {
+    const startingIndex = this.#buffer.lastIndexOf('\n', position);
+    if (startingIndex !== -1) {
+      this.#buffer.splice(startingIndex, position - startingIndex);
+    }
+    this.#buffer.splice(0);
+  }
 }
 
 exports.Buffer = Buffer;
