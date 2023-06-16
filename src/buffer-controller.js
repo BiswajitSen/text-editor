@@ -63,7 +63,8 @@ class BufferController {
 
   #leftKeyListener() {
     this.#keyBoardController.on('leftKey', () => {
-      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position());
+      const mode = this.#keyBoardController.mode();
+      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
     })
   }
 
@@ -74,7 +75,8 @@ class BufferController {
       if (!this.#buffer.hasElement(pos)) {
         this.#buffer.add(' ', pos);
       }
-      this.#renderer.render(this.#buffer.getData(), pos);
+      const mode = this.#keyBoardController.mode();
+      this.#renderer.render(this.#buffer.getData(), pos, mode);
     })
   }
 
