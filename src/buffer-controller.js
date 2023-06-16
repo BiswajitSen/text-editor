@@ -42,6 +42,7 @@ class BufferController {
     this.#keyBoardController.on('change-mode', () => {
       const mode = this.#keyBoardController.mode();
       this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
+      this.#renderer.render(this.#buffer.getData(), this.#cursorController.position(), mode);
     })
   }
 

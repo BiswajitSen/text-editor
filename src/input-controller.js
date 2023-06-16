@@ -49,7 +49,7 @@ class InputController {
     this.#setUpEnvironment();
     this.#addChangeModeListener();
     this.#stdin.on('data', (key) => {
-      if (this.#modeId === 0) {
+      if (this.#mode === 'INSERT') {
         const event = this.#currentKeyBindings[key] || 'buffer-write';
         this.#eventEmitter.emit(event, key);
       } else {
